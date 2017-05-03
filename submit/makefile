@@ -1,24 +1,21 @@
 #!make
 
-# makefile
-# oh my god i hate makefiles.
+CC        = gcc
+CFLAGS    = -g -I$(LIBSDIR)
 
-CC =gcc
-CFLAGS =-g -I$(LIBSDIR)
+LIBS      = -pthread
+LIBSDIR   = .
 
-LIBS =-pthread
-LIBSDIR =.
+OUTDIR    = .
 
-OUTDIR =.
-
-CLIENTDIR =.
-SERVERDIR =.
+CLIENTDIR = .
+SERVERDIR = .
 
 
 
 both:
-	make client
-	make server
+	@make -s client
+	@make -s server
 
 
 cliMajor.c: $(LIBSDIR)/ircdata.h
@@ -26,14 +23,14 @@ srvMajor.c: $(LIBSDIR)/ircdata.h
 
 
 client: cliMajor.c
-	$(CC) $(CLIENTDIR)/cliMajor.c -o $(OUTDIR)/cliMajor $(LIBS) $(CFLAGS)
+	@$(CC) $(CLIENTDIR)/cliMajor.c -o $(OUTDIR)/cliMajor $(LIBS) $(CFLAGS)
 
 
 server: srvMajor.c
-	$(CC) $(SERVERDIR)/srvMajor.c -o $(OUTDIR)/srvMajor $(LIBS) $(CFLAGS)
+	@$(CC) $(SERVERDIR)/srvMajor.c -o $(OUTDIR)/srvMajor $(LIBS) $(CFLAGS)
 
 
 
 clean:
-	rm $(OUTDIR)/cliMajor
-	rm $(OUTDIR)/srvMajor
+	@rm $(OUTDIR)/cliMajor
+	@rm $(OUTDIR)/srvMajor
