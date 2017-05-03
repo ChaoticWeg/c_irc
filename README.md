@@ -16,10 +16,11 @@ The only files that should be submitted are the source and header files, along w
 +-- client
 |   +-- (client source files)
 +-- lib
-|   +-- ircdata.h
-|   +-- (header files required by both)
+|   +-- (header files required by both client and server)
 +-- server
 |   +-- (server source files)
++-- submit
+|   +-- (files to be submitted to TAs via Bb)
 +-- .gitignore (files ignored by Git -- mainly compiled binaries)
 +-- README.md (this README)
 +-- makefile
