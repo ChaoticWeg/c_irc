@@ -27,11 +27,13 @@ srvMajor.c: $(LIBSDIR)/ircdata.h
 
 
 client: cliMajor.c
-	$(CC) $(CLIENTDIR)/cliMajor.c -o $(OUTDIR)/cliMajor $(LIBS) $(CFLAGS)
+	@if [ ! -d "$(OUTDIR)" ]; then mkdir $(OUTDIR); fi
+	@$(CC) $(CLIENTDIR)/cliMajor.c -o $(OUTDIR)/cliMajor $(LIBS) $(CFLAGS)
 
 
 server: srvMajor.c
-	$(CC) $(SERVERDIR)/srvMajor.c -o $(OUTDIR)/srvMajor $(LIBS) $(CFLAGS)
+	@if [ ! -d "$(OUTDIR)" ]; then mkdir $(OUTDIR); fi
+	@$(CC) $(SERVERDIR)/srvMajor.c -o $(OUTDIR)/srvMajor $(LIBS) $(CFLAGS)
 
 
 
@@ -41,6 +43,6 @@ clean:
 
 
 deploy:
-	rm -f $(DEPLOYDIR)/*.c
-	rm -f $(DEPLOYDIR)/*.h
-	./deploy.sh
+	@rm -f $(DEPLOYDIR)/*.c
+	@rm -f $(DEPLOYDIR)/*.h
+	@./deploy.sh
