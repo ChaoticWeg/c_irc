@@ -8,9 +8,6 @@ Coming right up...
 
 ### Project Structure
 
-Note: the structure of this repository likely does not match the structure required by the project guidelines. See #1.  
-The only files that should be submitted are the source and header files, along with a makefile that allows TAs to just run `make` to build the project.
-
 ```
 .
 +-- client
@@ -36,4 +33,12 @@ The only files that should be submitted are the source and header files, along w
 - Ensure code compiles and runs correctly on the CSE machines
   - This should not be an issue, as all development and testing should be done on the CSE machines anyway.
 
+### Deployment/Submission
 
+```
+$ make deploy
+$ cd submit/
+$ make
+```
+
+Make sure that we test the deployed code before submitting through Bb!
