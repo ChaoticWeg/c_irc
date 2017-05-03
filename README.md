@@ -33,7 +33,7 @@ Coming right up...
 - Ensure code compiles and runs correctly on the CSE machines
   - This should not be an issue, as all development and testing should be done on the CSE machines anyway.
 
-<sup>\*\* Requirement satisfied by `makefile`</sup>
+<sup>\*\* Requirement satisfied by `makefile`. See [#1](https://github.com/ChaoticWeg/csce3600-major/issues/1) for more.</sup>
 
 ### Deployment/Submission
 
