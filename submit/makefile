@@ -3,18 +3,17 @@
 # makefile
 # oh my god i hate makefiles.
 
-CC        = gcc
-CFLAGS    = -g -Werror -Wall -I$(LIBSDIR)
+CC =gcc
+CFLAGS =-g -I$(LIBSDIR)
 
-LIBS      = -pthread
-LIBSDIR   = ./lib
+LIBS =-pthread
+LIBSDIR =.
 
-OUTDIR    = ./bin
+OUTDIR =.
 
-CLIENTDIR = ./client
-SERVERDIR = ./server
+CLIENTDIR =.
+SERVERDIR =.
 
-DEPLOYDIR = ./submit
 
 
 both:
@@ -38,9 +37,3 @@ server: srvMajor.c
 clean:
 	rm $(OUTDIR)/cliMajor
 	rm $(OUTDIR)/srvMajor
-
-
-deploy:
-	rm -f $(DEPLOYDIR)/*.c
-	rm -f $(DEPLOYDIR)/*.h
-	./deploy.sh
