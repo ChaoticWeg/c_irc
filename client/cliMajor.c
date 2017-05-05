@@ -202,6 +202,7 @@ int main()
     send_data(IRCDATA_JOIN, "");
 
 
+    int run= 1;
     while (running && (fgets(buf_input, INPUT_BUFFER_LENGTH, stdin) != NULL))
     {
         // handle this command
@@ -210,7 +211,7 @@ int main()
         {
             char *text = strtok(NULL, "\n");
             if (text == NULL)
-                printf("*** ERROR: unknown command %s. Commands: message, file, quit\n", command);
+                printf("*** ERROR: message is missing. Usage message [user message]\n");
 
             else
                 send_data(IRCDATA_MSG, text);
@@ -218,10 +219,19 @@ int main()
 
         else if (strncmp(command, "quit", strlen("quit")) == 0)
         {
-            send_data(IRCDATA_LEAVE, "");
-            running = 0;
-            return safe_exit(0);
+	    break;
         }
+	
+	else if (strncmp(command, "file", strlen("file")) == 0)
+	{
+		
+	}
+	else 
+	{   
+	    if (run == 1) run = 0;
+	    else printf("*** ERROR: unknown command %s. Commands: message, file, quit\n", command);
+	
+    	}
     }
 
 
