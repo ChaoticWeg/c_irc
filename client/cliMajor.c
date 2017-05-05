@@ -200,9 +200,6 @@ int main()
     send_data(IRCDATA_JOIN, "");
 
 
-    // temp test message
-    send_data(IRCDATA_MSG, "Hello, world!");
-   
     while (running && (fgets(buf_input, INPUT_BUFFER_LENGTH, stdin) != NULL))
     {
         // handle this command
@@ -215,6 +212,13 @@ int main()
 
             else
                 send_data(IRCDATA_MSG, text);
+        }
+
+        else if (strncmp(command, "quit", strlen("quit")) == 0)
+        {
+            send_data(IRCDATA_LEAVE, "");
+            running = 0;
+            return safe_exit(0);
         }
     }
 
