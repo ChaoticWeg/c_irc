@@ -6,10 +6,13 @@
 
 #pragma once
 
+#include <string.h> // bzero()
+
 
 // errors
 #define IRCDATA_CONNREFUSED  -1
 #define IRCDATA_UNSUPPORTED  -2
+#define IRCDATA_INTERNALERR  -3
 
 
 // data
@@ -20,26 +23,33 @@
 
 
 // constraints
-#define IRCDATA_MAXLEN  256
+#define IRCDATA_MAXLEN   2000
+#define USERNAME_MAXLEN    15
 
 
+/** ONLY assign char* members via strcpy */
 struct ircdata_t
 {
     int type;
+
+    char username[USERNAME_MAXLEN + 1];
     
-    char *contents;
     int contents_length;
+    char contents[IRCDATA_MAXLEN];
 };
 
 
 /** Helper method: create struct ircdata_t with the given info */
-struct ircdata_t ircdata_create(int type, char *contents, int contents_length)
+struct ircdata_t ircdata_create(int type, char *contents)
 {
     struct ircdata_t result;
 
     result.type            = type;
-    result.contents        = contents;
-    result.contents_length = contents_length;
+
+    bzero(result.contents, IRCDATA_MAXLEN);
+    strncpy(result.contents, contents, IRCDATA_MAXLEN);
+
+    result.contents_length = strlen(result.contents) + 1;
 
     return result;
 }
