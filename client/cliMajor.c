@@ -160,7 +160,7 @@ int main()
 
     /* time to connect */
 
-    printf("Connecting to server %s as %s...\n\n", HOSTNAME, username);
+    printf("Connecting to server %s as %s... ", HOSTNAME, username);
 
     // make socket with default values
     sockfd = make_socket();
@@ -169,7 +169,7 @@ int main()
     struct hostent *server = gethostbyname(HOSTNAME);
     if (server == NULL)
     {
-        printf("Unable to lookup host: %s\n", HOSTNAME);
+        printf("\n\nUnable to lookup host: %s\n", HOSTNAME);
         safe_exit(-1);
     }
 
@@ -180,9 +180,11 @@ int main()
     // attempt to connect    
     if (connect(sockfd, (struct sockaddr *) &server_address, sizeof(server_address)) < 0)
     {
-        printf("Unable to connect: %s\n", strerror(errno));
+        printf("\n\nUnable to connect: %s\n", strerror(errno));
         safe_exit(1);
     }
+
+    printf("connected.\n\nCommands: message, file, quit\n\n");
 
 
     // connected. spawn message listener thread.
