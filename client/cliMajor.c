@@ -52,8 +52,33 @@ int send_data(int type, char *contents)
 
     return result;
 }
+void send_file()
+{
+    int nread;
+    unsigned char buff[256]={0};
+    char ifname[30];
 
+    //-TO DO- send what the server should do
+		
+    printf("File to upload to server: ");//file to save
+    scanf ("%29s", ifname);
 
+    write (sockfd, ifname, 30);//send file name to server
+
+    FILE *in_f = fopen (ifname,"r");//read local file
+    if (!in_f) //if file open fails
+    {
+	printf("ERROR on opening file \n");
+        return;
+    }
+    int loop= 1;	
+    while (loop == 1)//send file data to server
+    {
+	nread = fread(buff,1,245,in_f);
+	if (nread > 0) write (sockfd, buff, nread);
+	if (nread < 256) loop = 0;
+    }
+}
 int safe_exit(int code)
 {
     running = 0;
@@ -224,7 +249,7 @@ int main()
 	
 	else if (strncmp(command, "file", strlen("file")) == 0)
 	{
-		
+	    send_file();	
 	}
 	else 
 	{   
