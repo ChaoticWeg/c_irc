@@ -284,6 +284,7 @@ int main()
         if (strncmp(command, "message", strlen("message")) == 0)
         {
             char *text = strtok(NULL, "\n");
+
             if (text == NULL)
                 printf("*** ERROR: message is missing. Usage message [user message]\n");
 
@@ -299,11 +300,18 @@ int main()
 	else if (strncmp(command, "put", strlen("put")) == 0)
 	{
 	    char *fname = strtok(NULL, "\n");
+
 	    if (fname == NULL)
 		printf("*** ERROR: file name is missing. Usage file [file name]\n");
+
+            else if (strlen(fname) > FILENAME_MAXLEN)
+                printf("*** ERROR: file name is too long. Max is %d chars.\n", FILENAME_MAXLEN);
+        
 	    else
+            {
 		send_data(IRCDATA_FILE, fname);
 	    	send_file(fname);	
+            }
 	}
 	else 
 	{   
