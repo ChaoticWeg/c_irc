@@ -19,8 +19,10 @@ char buf_input[INPUT_BUFFER_LENGTH];
 char username[USERNAME_MAXLEN + 1];
 
 struct ircdata_t outgoing_data;
+FILE *outfile;
 
 int running = 1,
+    getting_file = 0,
     sockfd;
 
 
@@ -59,8 +61,6 @@ void send_file(char *ifname)
 
     char *buff = malloc(IRCDATA_FILE_BUFLEN);
 
-    printf("attempting to open file %s...\n", ifname);
-
     FILE *in_f = fopen (ifname,"r");//read local file
 
     if (!in_f) //if file open fails
@@ -71,7 +71,6 @@ void send_file(char *ifname)
 
     while ((nread = fread(buff, 1, IRCDATA_FILE_BUFLEN, in_f)) > 0)//send file data to server
     {
-        printf("sending: '%s'\n", buff);
         send_data(IRCDATA_FILE, buff);
 
 	if (nread < IRCDATA_FILE_BUFLEN) break;
@@ -96,6 +95,7 @@ int safe_exit(int code)
     bzero(username, USERNAME_MAXLEN + 1);
     bzero(buf_input, INPUT_BUFFER_LENGTH);
 
+    printf("\n");
     exit(code);
     return code; // dead code, but GCC won't compile without it
 }
@@ -140,6 +140,38 @@ void *message_listener_worker(void *arg)
 
                 printf("%s %s\n", username_padded, incoming.contents);
 
+                break;
+            }
+
+            case IRCDATA_FILE:
+            {
+                if (!getting_file || !outfile)
+                {
+                    getting_file = 1;
+                    outfile = fopen(incoming.filename, "w");
+                }
+
+                fwrite(incoming.contents, 1, incoming.contents_length, outfile);
+
+                break;
+            }
+
+            case IRCDATA_FILE_DONE:
+            {
+                getting_file = 0;
+
+                if (outfile)
+                    fclose(outfile);
+
+                printf("::: New file from %s: '%s'\n", incoming.username, incoming.filename);
+
+                break;
+            }
+
+            case IRCDATA_FILE_OK:
+            {
+                // file received OK by server
+                printf("::: Sent file '%s' to server\n", incoming.filename);
                 break;
             }
     

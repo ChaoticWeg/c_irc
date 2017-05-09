@@ -44,17 +44,18 @@ int safe_exit(int code)
 
 
 /** SIGINT handler */
-void on_sigint(int signal) { safe_exit(signal); }
+void on_sigint(int signal) { safe_exit(0); }
 
 
 
-void broadcast(struct ircdata_t outgoing)
+void broadcast_ignore(struct ircdata_t outgoing, int ignore)
 {
     pthread_mutex_lock(&client_mutex);
 
         int i; for (i = 0; i < MAX_CLIENTS; i++)
         {
             if (clients[i].active == CLIENT_INACTIVE) continue;
+            if (i >= 0 && i == ignore) continue;
 
             int sockfd    = clients[i].sockfd;
             int try_write = write(sockfd, &outgoing, sizeof(outgoing));
@@ -76,6 +77,8 @@ void broadcast(struct ircdata_t outgoing)
 
     pthread_mutex_unlock(&client_mutex);
 }
+
+void broadcast(struct ircdata_t outgoing) { broadcast_ignore(outgoing, -1); }
 
 void s_file(char *username, char *filename)
 {
@@ -213,33 +216,58 @@ void * client_worker(void *arg)
                     if (incoming.type == IRCDATA_FILE_DONE)
                         break;
 
-                    printf("%s file contents: '%s'\n", incoming.username, incoming.contents);
                     fwrite(incoming.contents, 1, strlen(incoming.contents) + 1, outfile);
                 }
 
-                printf("Done receiving file %s\n", filename);
+                printf("::: Done receiving file '%s' from %s\n", filename, incoming.username);
                 fclose(outfile);
                 
-      		int i; for (i = 0; i < MAX_CLIENTS; i++)
-        	{
-			//help getting access to client switch
-            		if (clients[i].active == CLIENT_INACTIVE)
-			{
-            			int sockfd    = clients[i].sockfd;
-				FILE *in_f = fopen (filename,"r");//read local file
-				int loop= 1;	
-				int nread;
-				char buff[256]={0};
-				while (loop == 1)//send file data to server
-				{
-					nread = fread(buff,1,245,in_f);
+                // tell client we got the file ok (probably)
+                struct ircdata_t bc = ircdata_create(IRCDATA_FILE_OK, "");
+                ircdata_copy_filename(&bc, filename);
+                write(sockfd, &bc, sizeof(bc));
+                
+                // re-open file to read and broadcast
+                FILE *infile = fopen(filename, "r");
+                if (!infile)
+                {
+                    printf("ERROR: unable to re-open/broadcast file '%s'\n", filename);
+                    break;
+                }
 
-					if (nread > 0) write (sockfd, buff, nread);
-					if (nread < 256) loop = 0;
-				}
-			}	
-		}
-	
+                // create the buffer that fread() will read into
+                char *read_buffer = malloc(IRCDATA_MAXLEN);
+                bzero(read_buffer, IRCDATA_MAXLEN);
+
+                // re-use bc from above
+                bzero((char *) &bc, sizeof(bc));
+
+                // read from infile, one chunk at a time
+                while ((nread = fread(read_buffer, 1, IRCDATA_MAXLEN, infile)) > 0)
+                {
+                    bc.type = IRCDATA_FILE;
+
+                    ircdata_copy_username(&bc, incoming.username);
+                    ircdata_copy_filename(&bc, filename);
+                    ircdata_copy_file_contents(&bc, read_buffer);
+
+                    // broadcast the file chunk to all clients EXCEPT the sender
+                    broadcast_ignore(bc, index);
+
+                    bzero(read_buffer, IRCDATA_MAXLEN);
+                    bzero((char *) &bc, sizeof(bc));
+                }
+
+
+                // broadcast that we are done to everyone EXCEPT the sender
+                bc.type = IRCDATA_FILE_DONE;
+                ircdata_copy_filename(&bc, filename);
+                ircdata_copy_username(&bc, incoming.username);
+                broadcast_ignore(bc, index);
+
+                printf("::: Done broadcasting file '%s' to clients\n", filename);
+                fclose(infile);
+	        
 		break;
 	}
             default:
