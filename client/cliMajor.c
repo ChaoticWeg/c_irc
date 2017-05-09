@@ -52,18 +52,10 @@ int send_data(int type, char *contents)
 
     return result;
 }
-void send_file()
+void send_file(char *ifname)
 {
     int nread;
     unsigned char buff[256]={0};
-    char ifname[30];
-
-    //-TO DO- send what the server should do
-		
-    printf("File to upload to server: ");//file to save
-    scanf ("%29s", ifname);
-
-    write (sockfd, ifname, 30);//send file name to server
 
     FILE *in_f = fopen (ifname,"r");//read local file
     if (!in_f) //if file open fails
@@ -249,7 +241,12 @@ int main()
 	
 	else if (strncmp(command, "file", strlen("file")) == 0)
 	{
-	    send_file();	
+	    char *text = strtok(NULL, "\n");
+	    if (text == NULL)
+		printf("*** ERROR: file name is missing. Usage file [file name]\n");
+	    else
+		send_data(IRCDATA_FILE, text);
+	    	send_file(text);	
 	}
 	else 
 	{   
