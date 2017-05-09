@@ -318,6 +318,7 @@ void server_worker(void *arg)
         if (next_active_client_index < 0)
         {
             // no inactive client spot available
+            printf("!!! Client tried to connect, but we already have %d active connections.\n!!! Rejecting...\n", MAX_CLIENTS);
 
             handshake_response = ircdata_create(IRCDATA_CONNREFUSED, "server is full");
 
