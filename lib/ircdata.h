@@ -24,8 +24,9 @@
 
 
 // constraints
-#define IRCDATA_MAXLEN   2000
-#define USERNAME_MAXLEN    15
+#define IRCDATA_MAXLEN      2000
+#define USERNAME_MAXLEN       15
+#define IRCDATA_FILE_BUFLEN  256
 
 
 /** ONLY assign char* members via strcpy */
