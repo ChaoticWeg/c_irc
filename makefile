@@ -45,6 +45,6 @@ clean:
 
 
 deploy:
-	@rm -f $(DEPLOYDIR)/*.c
-	@rm -f $(DEPLOYDIR)/*.h
+	rm -f $(DEPLOYDIR)/*.c
+	rm -f $(DEPLOYDIR)/*.h
 	@./deploy.sh
