@@ -20,9 +20,12 @@
 #include <errno.h>   // strerror(), errno
 #include <string.h>  // bzero()
 
+
+// connection info
 #define HOSTNAME         "cse01.cse.unt.edu"
 #define PORT_NUMBER      6943
 
+// socket constants
 #define SOCKET_DOMAIN    AF_INET
 #define SOCKET_TYPE      SOCK_STREAM
 #define SOCKET_PROTOCOL  IPPROTO_TCP
@@ -81,9 +84,11 @@ int bind_server_socket(int sockfd)
 */
 struct sockaddr_in get_server_address(struct hostent *server)
 {
+    // the INET sockaddr we will be returning
     struct sockaddr_in result;
     bzero((char *) &result, sizeof(result));
-    
+   
+    // copy hostent info into sockaddr
     result.sin_family = SOCKET_DOMAIN;
     bcopy((char *) server->h_addr, (char *) &result.sin_addr.s_addr, server->h_length);
     result.sin_port = htons(PORT_NUMBER);
