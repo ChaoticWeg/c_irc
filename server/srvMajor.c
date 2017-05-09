@@ -213,7 +213,6 @@ void * client_worker(void *arg)
                     if (incoming.type == IRCDATA_FILE_DONE)
                         break;
 
-                    printf("%s file contents: '%s'\n", incoming.username, incoming.contents);
                     fwrite(incoming.contents, 1, strlen(incoming.contents) + 1, outfile);
                 }
 
