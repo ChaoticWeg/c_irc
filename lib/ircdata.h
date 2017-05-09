@@ -63,8 +63,7 @@ void ircdata_copy_file_contents(struct ircdata_t *result, char *contents)
 {
     bzero(result->contents, IRCDATA_MAXLEN + 1);
     strncpy(result->contents, contents, IRCDATA_MAXLEN);
-    result->contents[IRCDATA_MAXLEN] = '\0';
-    result->contents_length = strlen(result->contents) + 1;
+    result->contents_length = strlen(result->contents);
 }
 
 void ircdata_copy_username(struct ircdata_t *result, char *username)
