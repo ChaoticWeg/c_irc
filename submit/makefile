@@ -12,8 +12,10 @@ CLIENTDIR = .
 SERVERDIR = .
 
 
+.PHONY: client server clean all
 
-both:
+
+all:
 	@make -s client
 	@make -s server
 
