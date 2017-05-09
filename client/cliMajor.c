@@ -88,7 +88,7 @@ void send_file(char *ifname)
     // handle error: input file failed to open
     if (!in_f)
     {
-	printf("Error opening file '%s'. Does it exist?\n");
+	printf("Error opening file '%s'. Does it exist?\n", ifname);
         return;
     }
 
