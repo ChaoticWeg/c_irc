@@ -45,8 +45,6 @@ clean:
 
 
 deploy:
-	rm -f $(DEPLOYDIR)/*.c
-	rm -f $(DEPLOYDIR)/*.h
-	rm -f $(DEPLOYDIR)/cliMajor
-	rm -f $(DEPLOYDIR)/srvMajor
+	@# find all files in $(DEPLOYDIR) not called 'makefile' and remove them
+	find $(DEPLOYDIR) ! -name 'makefile' -type f -exec rm -f {} +
 	@./deploy.sh
