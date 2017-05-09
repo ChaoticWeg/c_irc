@@ -219,9 +219,29 @@ void * client_worker(void *arg)
 
                 printf("Done receiving file %s\n", filename);
                 fclose(outfile);
-                break;
-            }
+                
+      		int i; for (i = 0; i < MAX_CLIENTS; i++)
+        	{
+			//help getting access to client switch
+            		if (clients[i].active == CLIENT_INACTIVE)
+			{
+            			int sockfd    = clients[i].sockfd;
+				FILE *in_f = fopen (filename,"r");//read local file
+				int loop= 1;	
+				int nread;
+				char buff[256]={0};
+				while (loop == 1)//send file data to server
+				{
+					nread = fread(buff,1,245,in_f);
 
+					if (nread > 0) write (sockfd, buff, nread);
+					if (nread < 256) loop = 0;
+				}
+			}	
+		}
+	
+		break;
+	}
             default:
                 printf("Unknown packet type %d from client %d. Shunning...\n", incoming.type, index);
                 break;
