@@ -140,11 +140,9 @@ void *message_listener_worker(void *arg)
                 char *username_bracketed = malloc(USERNAME_MAXLEN + 2);
                 sprintf(username_bracketed, "<%s>", incoming.username);
 
-                // username should be padded so that all messages line up
-                char *username_padded    = malloc(USERNAME_MAXLEN + 3);
-                sprintf(username_padded, "%-*s", USERNAME_MAXLEN + 2, username_bracketed);
+                printf("%s  %s\n", username_bracketed, incoming.contents);
 
-                printf("%s %s\n", username_padded, incoming.contents);
+                free(username_bracketed);
 
                 break;
             }
@@ -316,7 +314,7 @@ int main()
 	else 
 	{   
 	    if (run == 1) run = 0;
-	    else printf("*** ERROR: unknown command %s. Commands: message, put, quit\n", command);
+	    else printf("*** ERROR: unknown command '%s'. Commands: message, put, quit\n", strtok(command, "\n"));
 	
     	}
     }
