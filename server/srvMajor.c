@@ -76,26 +76,38 @@ void broadcast(struct ircdata_t outgoing)
 
     pthread_mutex_unlock(&client_mutex);
 }
-void s_file(char *username,char *contents)
+
+void s_file(char *username, char *filename)
 {
     pthread_mutex_lock(&client_mutex);
-    printf("inloop: %s\n",contents);    
+
     int n;
-    char buffer[256];
+
     FILE *in_f;
 
-    in_f = fopen (contents, "w");
-    while ((n = read(sockfd_server,buffer, 256)) > 0)
+    struct ircdata_t incoming;
+    bzero((char *) &incoming, sizeof(incoming));
+
+    in_f = fopen (filename, "w");
+
+    while ((n = read(sockfd_server, &incoming, sizeof(incoming))) > 0)
     {
-	fwrite(buffer,1,n,in_f);
-    }    
+        if (incoming.type == IRCDATA_FILE_DONE)
+            break;
+
+	fwrite(incoming.contents, 1, strlen(incoming.contents), in_f);
+        bzero((char *) &incoming, sizeof(incoming));
+    }
+
+    fclose(in_f);
 
     pthread_mutex_unlock(&client_mutex);
 }
+
 int get_next_client_index(int active)
 {
-    int result = -1;
-
+    int result = -1;  // need this here so we can be sure the mutex is unlocked before returning
+    
     pthread_mutex_lock(&client_mutex);
 
         int i; for (i = 0; i < MAX_CLIENTS; i++)
@@ -173,14 +185,45 @@ void * client_worker(void *arg)
             case IRCDATA_FILE:
             {
                 printf(">>> FILE %s: %s\n", incoming.username, incoming.contents);
-		printf("%s\n",incoming.contents);
-		s_file(incoming.username,incoming.contents);
+
+                int fname_length = strlen(incoming.contents) + 1;
+
+                char filename[fname_length];
+                bzero(filename, fname_length);
+
+                strncpy(filename, incoming.contents, fname_length);
+
+                FILE *outfile = fopen(filename, "w");
+                if (!outfile)
+                {
+                    printf("ERROR: unable to open file '%s'\n", filename);
+                    outgoing = ircdata_create(IRCDATA_INTERNALERR, "Unable to open file");
+                    write(sockfd, &outgoing, sizeof(outgoing));
+                    break;
+                }
+                
+                bzero((char *) &incoming, sizeof(incoming));
+
+                int nread;
+                while ((nread = read(sockfd, &incoming, sizeof(incoming))) > 0)
+                {
+                    if (incoming.type != IRCDATA_FILE)
+                        break;
+
+                    if (incoming.type == IRCDATA_FILE_DONE)
+                        break;
+
+                    printf("%s file contents: '%s'\n", incoming.username, incoming.contents);
+                    fwrite(incoming.contents, 1, strlen(incoming.contents) + 1, outfile);
+                }
+
+                printf("Done receiving file %s\n", filename);
+                fclose(outfile);
                 break;
             }
 
             default:
                 printf("Unknown packet type %d from client %d. Shunning...\n", incoming.type, index);
-                client_ok = 0;
                 break;
         }
     }
@@ -190,9 +233,6 @@ void * client_worker(void *arg)
 
     if (try_read < 0)
         printf("Error reading from client %d (sockfd: %d)\n", index, sockfd);
-
-    if (try_read == 0)
-        printf("Client %d disconnected\n", index);
 
 
     // lock mutex and set client status to inactive
@@ -219,6 +259,7 @@ void server_worker(void *arg)
     while (running)
     {
         bzero(&handshake_response, sizeof(handshake_response));
+
         struct sockaddr_in client_address;
         socklen_t client_length;
         
@@ -230,7 +271,7 @@ void server_worker(void *arg)
         {
             // no inactive client spot available
 
-            handshake_response = ircdata_create(IRCDATA_CONNREFUSED, "Server is full");
+            handshake_response = ircdata_create(IRCDATA_CONNREFUSED, "server is full");
 
             write(sockfd_client, &handshake_response, sizeof(handshake_response));
             
