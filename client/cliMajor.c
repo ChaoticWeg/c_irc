@@ -120,6 +120,9 @@ void *message_listener_worker(void *arg)
 
         switch (incoming.type)
         {
+            case 0:
+                break;
+
             case IRCDATA_JOIN:
             {
                 printf("*** %s joined the server\n", incoming.username);
