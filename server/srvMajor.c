@@ -76,9 +76,22 @@ void broadcast(struct ircdata_t outgoing)
 
     pthread_mutex_unlock(&client_mutex);
 }
+void s_file(char *username,char *contents)
+{
+    pthread_mutex_lock(&client_mutex);
+    printf("inloop: %s\n",contents);    
+    int n;
+    char buffer[256];
+    FILE *in_f;
 
+    in_f = fopen (contents, "w");
+    while ((n = read(sockfd_server,buffer, 256)) > 0)
+    {
+	fwrite(buffer,1,n,in_f);
+    }    
 
-
+    pthread_mutex_unlock(&client_mutex);
+}
 int get_next_client_index(int active)
 {
     int result = -1;
@@ -160,12 +173,8 @@ void * client_worker(void *arg)
             case IRCDATA_FILE:
             {
                 printf(">>> FILE %s: %s\n", incoming.username, incoming.contents);
-
-                outgoing = ircdata_create(IRCDATA_UNSUPPORTED, "File serving unsupported at this time");
-                write(sockfd, &outgoing, sizeof(outgoing));
-
-                // TODO how the hell
-
+		printf("%s\n",incoming.contents);
+		s_file(incoming.username,incoming.contents);
                 break;
             }
 
