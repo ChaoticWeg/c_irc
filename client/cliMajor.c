@@ -274,7 +274,7 @@ int main()
         safe_exit(thread_create);
     }
 
-    printf("connected.\n\nCommands: message, file, quit\n\n");
+    printf("connected.\n\nCommands: message, put, quit\n\n");
 
     int run= 1;
     while (running && (fgets(buf_input, INPUT_BUFFER_LENGTH, stdin) != NULL))
@@ -296,7 +296,7 @@ int main()
 	    break;
         }
 	
-	else if (strncmp(command, "file", strlen("file")) == 0)
+	else if (strncmp(command, "put", strlen("put")) == 0)
 	{
 	    char *fname = strtok(NULL, "\n");
 	    if (fname == NULL)
@@ -308,7 +308,7 @@ int main()
 	else 
 	{   
 	    if (run == 1) run = 0;
-	    else printf("*** ERROR: unknown command %s. Commands: message, file, quit\n", command);
+	    else printf("*** ERROR: unknown command %s. Commands: message, put, quit\n", command);
 	
     	}
     }
