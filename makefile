@@ -1,7 +1,15 @@
 #!make
+#
+#    
+#   CSCE 3600 Major Assignment
+#   
+#   Authors: Zach Newman (zrn0003)
+#            Shawn Lutch (sml0262)
+#   
+#   File:           makefile
+#   Description:    Defines GNU make rules for building and deploying project
+#   
 
-# makefile
-# oh my god i hate makefiles.
 
 CC        = gcc
 CFLAGS    = -g -Werror -Wall -I$(LIBSDIR)

@@ -1,4 +1,16 @@
 #!make
+#
+#   
+#   CSCE 3600 Major Assignment
+#   
+#   Authors: Zach Newman (zrn0003)
+#            Shawn Lutch (sml0262)
+#   
+#   File:           makefile 
+#   Description:    Defines GNU make rules for building the project.
+#                   Adapted from the makefile used to test this project.
+#
+
 
 CC        = gcc
 CFLAGS    = -g -I$(LIBSDIR)

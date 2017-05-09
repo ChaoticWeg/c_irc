@@ -1,7 +1,13 @@
-/**
-
-    header go here?
-
+/*
+    
+    CSCE 3600 Major Assignment
+    
+    Authors: Zach Newman (zrn0003)
+             Shawn Lutch (sml0262)
+    
+    File:           ircdata.h
+    Description:    Defines struct ircdata_t, the structure of the data sent between client and server
+    
 */
 
 #pragma once

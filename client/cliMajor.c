@@ -1,7 +1,13 @@
 /*
-
-    S I C K   H E A D E R   B R O
-
+    
+    CSCE 3600 Major Assignment
+    
+    Authors: Zach Newman (zrn0003)
+             Shawn Lutch (sml0262)
+    
+    File:           cliMajor.c
+    Description:    Client code
+    
 */
 
 #include <stdlib.h>

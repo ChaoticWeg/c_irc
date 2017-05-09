@@ -1,3 +1,15 @@
+/*
+    
+    CSCE 3600 Major Assignment
+    
+    Authors: Zach Newman (zrn0003)
+             Shawn Lutch (sml0262)
+    
+    File:           sockets.h
+    Description:    Provides helper methods regarding sockets
+    
+*/
+
 #pragma once
 
 #include <netdb.h>
@@ -21,12 +33,14 @@
 */
 int make_socket()
 {
+    // create socket FD
     int sockfd = socket(
         SOCKET_DOMAIN,
         SOCKET_TYPE,
         SOCKET_PROTOCOL
     );
 
+    // set TCP_NODELAY to 1 (true)
     int no_delay = 1;
     setsockopt(sockfd, IPPROTO_TCP, TCP_NODELAY, (char *) &no_delay, sizeof(no_delay));
 
