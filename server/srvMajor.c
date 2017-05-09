@@ -77,11 +77,10 @@ void broadcast(struct ircdata_t outgoing)
     pthread_mutex_unlock(&client_mutex);
 }
 
-void s_file(char *username,char *contents)
+void s_file(char *username, char *filename)
 {
     pthread_mutex_lock(&client_mutex);
 
-    printf("inloop: %s\n",contents);    
     int n;
 
     FILE *in_f;
@@ -89,7 +88,7 @@ void s_file(char *username,char *contents)
     struct ircdata_t incoming;
     bzero((char *) &incoming, sizeof(incoming));
 
-    in_f = fopen (contents, "w");
+    in_f = fopen (filename, "w");
 
     while ((n = read(sockfd_server, &incoming, sizeof(incoming))) > 0)
     {
@@ -107,8 +106,8 @@ void s_file(char *username,char *contents)
 
 int get_next_client_index(int active)
 {
-    int result = -1;
-
+    int result = -1;  // need this here so we can be sure the mutex is unlocked before returning
+    
     pthread_mutex_lock(&client_mutex);
 
         int i; for (i = 0; i < MAX_CLIENTS; i++)
@@ -235,9 +234,6 @@ void * client_worker(void *arg)
     if (try_read < 0)
         printf("Error reading from client %d (sockfd: %d)\n", index, sockfd);
 
-    if (try_read == 0)
-        printf("Client %d disconnected\n", index);
-
 
     // lock mutex and set client status to inactive
     pthread_mutex_lock(&client_mutex);
@@ -263,6 +259,7 @@ void server_worker(void *arg)
     while (running)
     {
         bzero(&handshake_response, sizeof(handshake_response));
+
         struct sockaddr_in client_address;
         socklen_t client_length;
         
@@ -274,7 +271,7 @@ void server_worker(void *arg)
         {
             // no inactive client spot available
 
-            handshake_response = ircdata_create(IRCDATA_CONNREFUSED, "Server is full");
+            handshake_response = ircdata_create(IRCDATA_CONNREFUSED, "server is full");
 
             write(sockfd_client, &handshake_response, sizeof(handshake_response));
             

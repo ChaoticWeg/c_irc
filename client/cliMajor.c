@@ -104,10 +104,14 @@ int safe_exit(int code)
 void *message_listener_worker(void *arg)
 {
     struct ircdata_t incoming;
-
     int bytes;
+
+    send_data(IRCDATA_JOIN, "");
+
     while (running && (bytes = read(sockfd, &incoming, sizeof(incoming))) > 0)
     {
+        running = 1;
+
         switch (incoming.type)
         {
             case IRCDATA_JOIN:
@@ -140,8 +144,16 @@ void *message_listener_worker(void *arg)
             }
     
             default:
-                if (incoming.type < 0) printf("*** Server error: %s\n", incoming.contents);
-                else printf("*** Unknown message from server (%d): %s\n", incoming.type, incoming.contents);
+                if (incoming.type < 0) 
+                {
+                    printf("*** Server error: %s\n", incoming.contents);
+                    running = 0;
+                    safe_exit(0);
+                }
+                else
+                {
+                    printf("*** Unknown message from server (%d): %s\n", incoming.type, incoming.contents);
+                }
                 break;
         }
     }
@@ -153,6 +165,8 @@ void *message_listener_worker(void *arg)
         printf("*** Connection closed by server\n");
 
     running = 0;
+    safe_exit(bytes);
+    
     return NULL;
 }
 
@@ -163,9 +177,6 @@ int main()
 {
     // trap SIGINT for safe exit
     signal(SIGINT, &on_sigint);
-
-    // we're running!
-    running = 1;
 
 
     /* time for username input */
@@ -214,8 +225,6 @@ int main()
         safe_exit(1);
     }
 
-    printf("connected.\n\nCommands: message, file, quit\n\n");
-
 
     // connected. spawn message listener thread.
     pthread_t listener_thread;
@@ -227,10 +236,7 @@ int main()
         safe_exit(thread_create);
     }
 
-   
-    // join server 
-    send_data(IRCDATA_JOIN, "");
-
+    printf("connected.\n\nCommands: message, file, quit\n\n");
 
     int run= 1;
     while (running && (fgets(buf_input, INPUT_BUFFER_LENGTH, stdin) != NULL))
