@@ -57,27 +57,29 @@ void send_file(char *ifname)
 {
     int nread;
 
-    char buff[256]={0};
+    char *buff = malloc(IRCDATA_FILE_BUFLEN);
+
+    printf("attempting to open file %s...\n", ifname);
 
     FILE *in_f = fopen (ifname,"r");//read local file
+
     if (!in_f) //if file open fails
     {
 	printf("ERROR on opening file \n");
         return;
     }
-    int loop= 1;	
-    while (loop == 1)//send file data to server
+
+    while ((nread = fread(buff, 1, IRCDATA_FILE_BUFLEN, in_f)) > 0)//send file data to server
     {
-	nread = fread(buff,1,245,in_f);
+        printf("sending: '%s'\n", buff);
+        send_data(IRCDATA_FILE, buff);
 
-	if (nread > 0)
-        {
-            send_data(IRCDATA_FILE, buff);
-        }
-
-	if (nread < 256) loop = 0;
+	if (nread < IRCDATA_FILE_BUFLEN) break;
     }
     
+    fclose(in_f);
+    free(buff);
+
     send_data(IRCDATA_FILE_DONE, "");
 }
 
@@ -138,7 +140,8 @@ void *message_listener_worker(void *arg)
             }
     
             default:
-                printf("*** Unknown/unsupported message received from server (%d): %s\n", incoming.type, incoming.contents);
+                if (incoming.type < 0) printf("*** Server error: %s\n", incoming.contents);
+                else printf("*** Unknown message from server (%d): %s\n", incoming.type, incoming.contents);
                 break;
         }
     }
@@ -251,12 +254,12 @@ int main()
 	
 	else if (strncmp(command, "file", strlen("file")) == 0)
 	{
-	    char *text = strtok(NULL, "\n");
-	    if (text == NULL)
+	    char *fname = strtok(NULL, "\n");
+	    if (fname == NULL)
 		printf("*** ERROR: file name is missing. Usage file [file name]\n");
 	    else
-		send_data(IRCDATA_FILE, text);
-	    	send_file(text);	
+		send_data(IRCDATA_FILE, fname);
+	    	send_file(fname);	
 	}
 	else 
 	{   
