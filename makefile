@@ -22,6 +22,8 @@ both:
 	make server
 
 
+.PHONY: client server clean deploy
+
 cliMajor.c: $(LIBSDIR)/ircdata.h
 srvMajor.c: $(LIBSDIR)/ircdata.h
 
