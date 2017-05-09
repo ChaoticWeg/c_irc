@@ -52,10 +52,12 @@ int send_data(int type, char *contents)
 
     return result;
 }
+
 void send_file(char *ifname)
 {
     int nread;
-    unsigned char buff[256]={0};
+
+    char buff[256]={0};
 
     FILE *in_f = fopen (ifname,"r");//read local file
     if (!in_f) //if file open fails
@@ -67,10 +69,18 @@ void send_file(char *ifname)
     while (loop == 1)//send file data to server
     {
 	nread = fread(buff,1,245,in_f);
-	if (nread > 0) write (sockfd, buff, nread);
+
+	if (nread > 0)
+        {
+            send_data(IRCDATA_FILE, buff);
+        }
+
 	if (nread < 256) loop = 0;
     }
+    
+    send_data(IRCDATA_FILE_DONE, "");
 }
+
 int safe_exit(int code)
 {
     running = 0;

@@ -8,3 +8,6 @@ bin/
 submit/*.c
 submit/*.h
 submit/*Major
+
+# testing file sending
+*.txt

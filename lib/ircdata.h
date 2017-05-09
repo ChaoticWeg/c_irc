@@ -16,10 +16,11 @@
 
 
 // data
-#define IRCDATA_LEAVE  0
-#define IRCDATA_JOIN   1
-#define IRCDATA_MSG    2
-#define IRCDATA_FILE   3
+#define IRCDATA_LEAVE      0
+#define IRCDATA_JOIN       1
+#define IRCDATA_MSG        2
+#define IRCDATA_FILE       3
+#define IRCDATA_FILE_DONE  4
 
 
 // constraints
