@@ -9,7 +9,7 @@
 #include <string.h>  // bzero()
 
 #define HOSTNAME         "cse01.cse.unt.edu"
-#define PORT_NUMBER      6942
+#define PORT_NUMBER      6943
 
 #define SOCKET_DOMAIN    AF_INET
 #define SOCKET_TYPE      SOCK_STREAM
