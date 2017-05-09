@@ -91,7 +91,7 @@ void s_file(char *username, char *filename)
     struct ircdata_t incoming;
     bzero((char *) &incoming, sizeof(incoming));
 
-    in_f = fopen (filename, "w");
+    in_f = fopen (filename, "wb");
 
     while ((n = read(sockfd_server, &incoming, sizeof(incoming))) > 0)
     {
@@ -196,7 +196,7 @@ void * client_worker(void *arg)
 
                 strncpy(filename, incoming.contents, fname_length);
 
-                FILE *outfile = fopen(filename, "w");
+                FILE *outfile = fopen(filename, "wb");
                 if (!outfile)
                 {
                     printf("ERROR: unable to open file '%s'\n", filename);
@@ -228,7 +228,7 @@ void * client_worker(void *arg)
                 write(sockfd, &bc, sizeof(bc));
                 
                 // re-open file to read and broadcast
-                FILE *infile = fopen(filename, "r");
+                FILE *infile = fopen(filename, "rb");
                 if (!infile)
                 {
                     printf("ERROR: unable to re-open/broadcast file '%s'\n", filename);

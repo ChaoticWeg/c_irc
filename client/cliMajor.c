@@ -67,7 +67,7 @@ void send_file(char *ifname)
 
     char *buff = malloc(IRCDATA_FILE_BUFLEN);
 
-    FILE *in_f = fopen (ifname,"r");//read local file
+    FILE *in_f = fopen (ifname,"rb");//read local file
 
     if (!in_f) //if file open fails
     {
@@ -154,7 +154,7 @@ void *message_listener_worker(void *arg)
                 if (!getting_file || !outfile)
                 {
                     getting_file = 1;
-                    outfile = fopen(incoming.filename, "w");
+                    outfile = fopen(incoming.filename, "wb");
                 }
 
                 fwrite(incoming.contents, 1, incoming.contents_length, outfile);
