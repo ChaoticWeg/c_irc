@@ -180,7 +180,6 @@ void * client_worker(void *arg)
 
             default:
                 printf("Unknown packet type %d from client %d. Shunning...\n", incoming.type, index);
-                client_ok = 0;
                 break;
         }
     }
