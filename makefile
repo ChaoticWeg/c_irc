@@ -47,4 +47,6 @@ clean:
 deploy:
 	rm -f $(DEPLOYDIR)/*.c
 	rm -f $(DEPLOYDIR)/*.h
+	rm -f $(DEPLOYDIR)/cliMajor
+	rm -f $(DEPLOYDIR)/srvMajor
 	@./deploy.sh
