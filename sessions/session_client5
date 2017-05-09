@@ -1,0 +1,13 @@
+Script started on Tue 09 May 2017 11:15:06 AM CDT
+sml0262@cse02:~/3600/major/submit$ ./cliMajor 
+Username: kick_me
+Connecting to server cse01.cse.unt.edu as kick_me... connected.
+
+Commands: message, put, quit
+
+*** Server error: server is full
+
+sml0262@cse02:~/3600/major/submit$ exit
+exit
+
+Script done on Tue 09 May 2017 11:15:23 AM CDT
