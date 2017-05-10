@@ -4,7 +4,7 @@ A simple messaging system prototype (aka CSCE 3600 Major Assignment)
 
 ### Overview
 
-Coming right up...
+*UPDATE 9 MAY 2017*: As of 10:53 pm, this project has been submitted for grading.
 
 ### Project Structure
 
@@ -16,6 +16,8 @@ Coming right up...
 |   +-- (header files required by both client and server)
 +-- server
 |   +-- (server source files)
++-- sessions
+|   +-- (`script` session files)
 +-- submit
 |   +-- (files to be submitted to TAs via Bb)
 +-- .gitignore (files ignored by Git -- mainly compiled binaries)
