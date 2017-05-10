@@ -16,5 +16,5 @@ submit/*Major
 *.jpg
 
 # recorded script sessions (for submission)
-submit/session_*
+submit/sessions/
 
