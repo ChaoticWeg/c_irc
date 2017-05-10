@@ -4,7 +4,7 @@ A simple messaging system prototype (aka CSCE 3600 Major Assignment)
 
 ### Overview
 
-*UPDATE 9 MAY 2017*: As of 10:53 pm, this project has been submitted for grading.
+**UPDATE 9 MAY 2017**: As of 10:53 pm, this project has been submitted for grading.
 
 ### Project Structure
 
