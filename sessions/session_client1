@@ -1,0 +1,32 @@
+Script started on Tue 09 May 2017 11:11:51 AM CDT
+sml0262@cse01:~/3600/major/submit$ ./cliMajor 
+Username: sml0262
+Connecting to server cse01.cse.unt.edu as sml0262... connected.
+
+Commands: message, put, quit
+
+*** sml0262 joined the server
+*** zrn0003 joined the server
+*** weg joined the server
+*** hackerman joined the server
+message that's 4 people connected
+<sml0262>  that's 4 people connected
+<weg>  yup
+<weg>  so what if someone connects now that we're full?
+message just looked a  t the logs, looks like "kick_me" tried to join but was rejected
+<sml0262>  just looked at the logs, looks like "kick_me" tried to join but was rejected
+message by the way, who is "hackerman"?
+<sml0262>  by the way, who is "hackerman"?
+::: New file from hackerman: 'virus.txt'
+<hackerman>  hahaha
+*** hackerman left the server
+<weg>  noooooo
+*** weg left the server
+<zrn0003>  rip
+*** zrn0003 left the server
+*** Connection closed by server
+
+sml0262@cse01:~/3600/major/submit$ exit
+exit
+
+Script done on Tue 09 May 2017 11:16:43 AM CDT

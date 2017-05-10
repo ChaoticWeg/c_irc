@@ -1,7 +1,15 @@
 #!make
+#
+#    
+#   CSCE 3600 Major Assignment
+#   
+#   Authors: Zach Newman (zrn0003)
+#            Shawn Lutch (sml0262)
+#   
+#   File:           makefile
+#   Description:    Defines GNU make rules for building and deploying project
+#   
 
-# makefile
-# oh my god i hate makefiles.
 
 CC        = gcc
 CFLAGS    = -g -Werror -Wall -I$(LIBSDIR)
@@ -45,6 +53,6 @@ clean:
 
 
 deploy:
-	@rm -f $(DEPLOYDIR)/*.c
-	@rm -f $(DEPLOYDIR)/*.h
+	@# find all files in $(DEPLOYDIR) not called 'makefile' and remove them
+	find $(DEPLOYDIR) ! -name 'makefile' -type f -exec rm -f {} +
 	@./deploy.sh

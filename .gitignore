@@ -11,3 +11,10 @@ submit/*Major
 
 # testing file sending
 *.txt
+*.mp4
+*.pptx
+*.jpg
+
+# recorded script sessions (for submission)
+submit/session_*
+

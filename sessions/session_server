@@ -1,0 +1,30 @@
+Script started on Tue 09 May 2017 11:11:45 AM CDT
+sml0262@cse01:~/3600/major/submit$ ./srvMajor 
+Listening on port 6943
+
+>>> JOIN: sml0262
+>>> JOIN: zrn0003
+>>> JOIN: weg
+>>> JOIN: hackerman
+>>> MSG sml0262: that's 4 people connected
+>>> MSG weg: yup
+>>> MSG weg: so what if someone connects now that we're full?
+!!! Client tried to connect, but we already have 4 active connections.
+!!! Rejecting...
+>>> MSG sml0262: just looked at the logs, looks like "kick_me" tried to join but was rejected
+>>> MSG sml0262: by the way, who is "hackerman"?
+>>> FILE hackerman: virus.txt
+::: Done receiving file 'virus.txt' from hackerman
+::: Done broadcasting file 'virus.txt' to clients
+>>> MSG hackerman: hahaha
+>>> LEAVE: hackerman
+>>> MSG weg: noooooo
+>>> LEAVE: weg
+>>> MSG zrn0003: rip
+>>> LEAVE: zrn0003
+^C
+Closing server...
+sml0262@cse01:~/3600/major/submit$ exit
+exit
+
+Script done on Tue 09 May 2017 11:16:41 AM CDT
